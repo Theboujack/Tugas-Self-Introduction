@@ -4,37 +4,192 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tugas Sekolah</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bitcount+Prop+Single:wght@100..900&family=Federant&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bitcount+Prop+Single:wght@100..900&family=Federant&display=swap" rel="stylesheet">
   <style>
     body {
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
       margin: 0;
-      font-family: "Inter", sans-serif;
-      background: #f5f6fa;
-      color: #333;
+      padding: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: flex-start;
       min-height: 100vh;
     }
-    header {
-      text-align: center;
-      padding: 30px 20px 10px;
-    }
-    header h1 {
-      font-size: 2.2em;
-      margin: 0;
-      color: #5C5E4C;
+
+    h1 {
+      margin-top: 20px;
+      color: #91A435;
+      font-size: 28px;
       font-family: "Federant", serif;
+      text-align: center;
     }
-    header p {
-      font-size: 0.8em;
-      color: #ED7C7C;
-      margin-top: 8px;
+
+    p {
+      margin: 0 0 20px 0;
+      color: #E55555;
       font-family: "Bitcount Prop Single", system-ui;
+      font-size: 15px;
+      margin-top: -20px;
     }
+
     .video-container {
+      position: relative;
+      background: #fff;
+      padding: 15px;
+      border-radius: 20px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 700px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden; /* biar partikel tidak keluar area */
+    }
+
+    iframe {
+      width: 100%;
+      height: 380px;
+      border-radius: 12px;
+      border: none;
+    }
+
+    .controls {
+      margin-top: 15px;
+      display: flex;
+      gap: 15px;
+    }
+
+    button {
+      border: none;
+      padding: 12px 22px;
+      font-size: 16px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 2;
+      position: relative;
+    }
+
+    #likeBtn {
+      background: #ef4444;
+    }
+
+    #fullscreenBtn {
+      background: #3b82f6;
+    }
+
+    /* Partikel love */
+    .particle {
+      position: absolute;
+      bottom: 10px;
+      font-size: 26px;
+      animation: flyUp 3s ease-out forwards;
+      pointer-events: none;
+    }
+
+    @keyframes flyUp {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: translateY(-150px) scale(1.2);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-300px) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      iframe {
+        height: 240px;
+      }
+    }
+    footer {
+      margin-top: auto;
+      padding: 20px;
+      text-align: center;
+      font-size: 0.85em;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <h1>English Self-<br>Introduction Assignment</h1>
+  <p>Video presentasi saya 🎥</p>
+
+  <div class="video-container" id="videoContainer">
+    <!-- Ganti link di bawah dengan link embed Google Drive -->
+    <iframe src="https://drive.google.com/file/d/1Prrm-_hJ88kOn1qVPwUjJXnoZsc-CSbG/preview" ></iframe>
+
+    <div class="controls">
+      <button id="likeBtn">👍 Like</button>
+      <button id="fullscreenBtn">⛶ Fullscreen</button>
+    </div>
+  </div>
+  <footer>&copy; 2025 Dibuat oleh [Sya444]</footer>
+  <script>
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+    const videoContainer = document.getElementById("videoContainer");
+    const likeBtn = document.getElementById("likeBtn");
+
+    // Fullscreen toggle
+    fullscreenBtn.addEventListener("click", async () => {
+      if (!document.fullscreenElement) {
+        if (videoContainer.requestFullscreen) {
+          await videoContainer.requestFullscreen();
+        } else if (videoContainer.webkitRequestFullscreen) {
+          await videoContainer.webkitRequestFullscreen();
+        } else if (videoContainer.msRequestFullscreen) {
+          await videoContainer.msRequestFullscreen();
+        }
+
+        if (screen.orientation && screen.orientation.lock) {
+          try {
+            await screen.orientation.lock("landscape");
+          } catch (err) {
+            console.log("Orientation lock tidak didukung:", err);
+          }
+        }
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    // Tombol Like -> partikel terbang ke atas
+    likeBtn.addEventListener("click", () => {
+      for (let i = 0; i < 15; i++) {
+        const particle = document.createElement("span");
+        particle.innerHTML = "❤";
+        particle.classList.add("particle");
+
+        // Posisi horizontal acak di dalam container
+        particle.style.left = Math.random() * 90 + "%";
+
+        // Animasi delay biar lebih natural
+        particle.style.animationDelay = Math.random() * 1 + "s";
+
+        videoContainer.appendChild(particle);
+
+        setTimeout(() => {
+          particle.remove();
+        }, 3000);
+      }
+    });
+  </script>
+</body>
+</html>    .video-container {
       background: #fff;
       border-radius: 12px;
       padding: 15px;
